@@ -1,15 +1,27 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
+import { Container, FullDivider, Page } from './style';
+import { CommunityHeader } from './components/CommunityHeader';
+import TrendingCarousel from './components/TrendingCarousel';
+import FeedGrid from './components/FeedGrid';
 
 const CommunityMain = () => {
   return (
-    <div>
-      <h1>커뮤니티 메인 페이지</h1>
+    <Page>
       <Outlet/> {/*팝업 게시물 자리*/}
-      <div>
-        <Link to={"post/:postId"}>게시물</Link>
-      </div>
-    </div>
+
+      <Container>
+        <CommunityHeader/>
+      </Container>
+
+      <FullDivider />
+
+      <Container>
+        <TrendingCarousel/>
+        <FeedGrid/>
+        {/* <Link to={"post/:postId"}>게시물</Link> */}
+      </Container>
+    </Page>
   );
 };
 
