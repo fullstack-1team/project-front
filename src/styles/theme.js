@@ -4,7 +4,7 @@ const theme = {
   PALLETE: {
     primary: {
       main: "#ff4e37",
-      sub: "#e9edf5",
+      sub: "#fff2e8",
     },
     secondary: "#018264",
     white: "#ffffff",
@@ -26,7 +26,8 @@ const theme = {
       white: "#ffffff",
       gray: "#f2f2f2"
     },
-    mainblack: "#000000"
+    mainblack: "#000000",
+    hederandfooter : "#262626"
   },
 
   // 2. 폰트 사이즈: h1부터 h8까지 정의
