@@ -1,6 +1,8 @@
 import React from "react";
 import * as S from '../../pages/loginandjoin/style';
 import KakaoLoginComponent from "./KakaoLoginComponent";
+import NaverLoginComponent from "./NaverLoginComponent";
+import AppleLoginComponent from "./AppleLoginComponent";
 
 const QuickLoginComponent = () => {
 
@@ -12,12 +14,8 @@ const QuickLoginComponent = () => {
         <S.LoginLegend align="center">&nbsp;간편 로그인&nbsp;</S.LoginLegend>
         <S.QuickIconBox>
           <KakaoLoginComponent/>
-          <S.QuickIconImg 
-            src="\assets\icons\naver_button.png"
-          />
-          <S.QuickIconImg
-            src="\assets\icons\apple_button.png"
-          />
+          <NaverLoginComponent/>
+          <AppleLoginComponent/>
         </S.QuickIconBox>
       </S.StyledLoginFieldset>
     </S.QuickContainer>

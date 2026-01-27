@@ -142,3 +142,11 @@ cursor: pointer;
   filter:brightness(0.9);
 }
 `
+
+export const JoinByKakaoContainer = styled.div`
+
+`
+
+export const JoinByKakaoBox = styled.div`
+
+`

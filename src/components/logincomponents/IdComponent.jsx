@@ -1,5 +1,5 @@
 import React from "react";
-import * as S from '../../pages/loginandjoin/style';
+import * as S from "../../pages/loginandjoin/style";
 const IdComponent = () => {
   return (
     <div>
