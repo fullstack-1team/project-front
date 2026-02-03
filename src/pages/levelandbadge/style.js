@@ -96,10 +96,11 @@ export const MyLevelProgressWrap = styled.div`
 export const MyLevelProgressContainer = styled.div`
   width: 820px;
   height: 20px;
-  background-color: #eee;
+  background-color: ${theme.PALLETE.gray[300]};
   border-radius: 20px;
-  overflow: hidden; /* 이게 있어야 내부 바의 곡률이 깨지지 않음 */
+  overflow: hidden;
   position: relative;
+  margin: 15px 0 15px 0 ;
 `;
 
 export const MyLevelProgress = styled.div`
@@ -109,11 +110,11 @@ export const MyLevelProgress = styled.div`
   transition: width 0.4s ease-out; /* 나중에 데이터 바뀔 때 슥 차오름 */
 `;
 
-export const ExpText = styled.span`
-  font-size: 12px;
-  color: #888;
+export const ExpText = styled.div`
+  ${FONT_STYLE.PRETENDARD.H7_BOLD};
+  color: ${theme.PALLETE.headerandfooter};
+  width : calc(100%-600px);
   text-align: right;
-  margin-top: 4px;
 `;
 
 export const MyLevelProfileWrap = styled.div`
@@ -137,9 +138,7 @@ z-index:1;
 top: 88px;
 `
 
-export const LevelNextMedal = styled.img`
-width:165px;
-`
+
 
 export const LevelLabel = styled.div`
   ${FONT_STYLE.PRETENDARD.H5_BOLD};
@@ -154,4 +153,33 @@ border-radius: 20px;
 color: ${theme.PALLETE.mainblack};
 ${FONT_STYLE.PRETENDARD.H6_BOLD};
 ${flexCenter};
+`
+
+export const LevelInfoWrap = styled.div`
+width: calc(100%-600px);
+display: flex;
+align-items:center;
+gap: 15px;
+`
+
+export const LevelProgressContainer = styled.div`
+display: flex;
+flex-direction:column;
+justify-content:center;
+`
+
+export const LevelNextMedal = styled.img`
+width:145px;
+`
+
+export const NextMedalInfo = styled.div`
+${FONT_STYLE.PRETENDARD.H6_MEDIUM};
+color: ${theme.PALLETE.gray[900]};
+`
+
+export const MedalWrap = styled.div`
+position:relative;
+width: 300px;
+height: 100%;
+${flexCenterColumn};
 `

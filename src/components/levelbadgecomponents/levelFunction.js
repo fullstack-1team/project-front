@@ -16,6 +16,7 @@ export const LEVEL_SETTINGS = {
   14: { maxExp: 850, label: "정식 요리사" },
   15: { maxExp: 1000, label: "정식 요리사" },
   16: { maxExp: 1200, label: "호텔 요리사" },
+  // 16레벨 - 25레벨 : 은메달
   17: { maxExp: 1400, label: "호텔 요리사" },
   18: { maxExp: 1600, label: "호텔 요리사" },
   19: { maxExp: 1800, label: "호텔 요리사" },
@@ -25,6 +26,7 @@ export const LEVEL_SETTINGS = {
   23: { maxExp: 2800, label: "미슐렝 요리사" },
   24: { maxExp: 3000, label: "미슐렝 요리사" },
   25: { maxExp: 3200, label: "미슐렝 요리사" },
+  // 26레벨 ~ 금메달
   26: { maxExp: 3500, label: "냉장고 마스터" },
   27: { maxExp: 3800, label: "냉장고 마스터" },
   28: { maxExp: 4100, label: "냉장고 마스터" },
@@ -37,3 +39,15 @@ export const DEFAULT_USER_DATA = {
   level: 1,
   currentExp: 0
 };
+
+export const FarFromNextLevel = ({level}) => {
+  let result = 0
+  if(level<16){
+    result = 16 - level
+  }else if(26 > level >= 16){
+    result = 26 - level
+  }else{
+    result = 0
+  }
+  return result
+}
