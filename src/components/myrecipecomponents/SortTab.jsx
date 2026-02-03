@@ -9,11 +9,12 @@ import * as S from "./style";
 const SortTab = ({ options = [], value, onChange }) => {
   return (
     <S.SortTabWrapper>
-      {options.map((opt) => (
+      {options.map((opt, idx) => (
         <S.SortTabButton
           key={opt.key}
           type="button"
           $active={opt.key === value}
+          $isLast={idx === options.length - 1}
           onClick={() => onChange?.(opt.key)}
         >
           {opt.label}
