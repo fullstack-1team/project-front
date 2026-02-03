@@ -1,5 +1,9 @@
 import React from "react";
-import { LEVEL_SETTINGS, DEFAULT_USER_DATA } from "./levelFunction";
+import {
+  LEVEL_SETTINGS,
+  DEFAULT_USER_DATA,
+  FarFromNextLevel,
+} from "./levelFunction";
 import * as S from "../../pages/levelandbadge/style";
 
 const LevelComponent = ({ userLevel, userCurrentExp }) => {
@@ -20,28 +24,39 @@ const LevelComponent = ({ userLevel, userCurrentExp }) => {
   return (
     <S.MyLevelProgressWrap>
       <S.MyLevelProfileWrap>
-        <S.MyLevelProfileContainer src="\assets\images\bronze_frame.png" alt="레벨 프로필 테두리" />
-        <S.MyLevelProfileImg src="\assets\images\pinggu.png" alt="예시 프로필 이미지"/>
-       </S.MyLevelProfileWrap>
+        <S.MyLevelProfileContainer
+          src="\assets\images\bronze_frame.png"
+          alt="레벨 프로필 테두리"
+        />
+        <S.MyLevelProfileImg
+          src="\assets\images\pinggu.png"
+          alt="예시 프로필 이미지"
+        />
+      </S.MyLevelProfileWrap>
 
-      <div>
-        <div>
-            <S.LevelLabel>{levelInfo.label}</S.LevelLabel>
-            <S.LevelCurrent>현재 LV. {level}</S.LevelCurrent>
-        </div>
+      <S.LevelProgressContainer>
+        <S.LevelInfoWrap>
+          <S.LevelLabel>{levelInfo.label}</S.LevelLabel>
+          <S.LevelCurrent>현재 LV. {level}</S.LevelCurrent>
+        </S.LevelInfoWrap>
         <S.MyLevelProgressContainer>
           <S.MyLevelProgress width={progressPercent} />
         </S.MyLevelProgressContainer>
         <S.ExpText>
-          {currentExp.toLocaleString()} / {maxExp.toLocaleString()} EXP
-          ({progressPercent.toFixed(0)}%)
+          {currentExp.toLocaleString()} / {maxExp.toLocaleString()} EXP (
+          {progressPercent.toFixed(0)}%)
         </S.ExpText>
-      </div>
+      </S.LevelProgressContainer>
 
-      <S.MyLevelProfileWrap>
-        <S.LevelNextMedal src="\assets\images\silver_medal.png" alt="다음 메달" />
-      </S.MyLevelProfileWrap>
-
+      <S.MedalWrap>
+        <S.LevelNextMedal
+          src="\assets\images\silver_medal.png"
+          alt="다음 메달"
+        />
+        <S.NextMedalInfo>
+          다음 메달까지{<br />}남은 레벨: {FarFromNextLevel({level})}LV
+        </S.NextMedalInfo>
+      </S.MedalWrap>
     </S.MyLevelProgressWrap>
   );
 };
