@@ -81,6 +81,7 @@ export const MyLevelField = styled.fieldset`
 export const MyLevelLegend = styled.legend`
   ${FONT_STYLE.GIANTS.H5_REGULAR};
   color: ${theme.PALLETE.headerandfooter};
+  margin: 0 0 10px;
 `;
 
 export const MyLevelProgressWrap = styled.div`
@@ -100,12 +101,12 @@ export const MyLevelProgressContainer = styled.div`
   border-radius: 20px;
   overflow: hidden;
   position: relative;
-  margin: 15px 0 15px 0 ;
+  margin: 15px 0 15px 0;
 `;
 
 export const MyLevelProgress = styled.div`
   height: 100%;
-  background: #009BFF;
+  background: #009bff;
   width: ${(props) => props.width}%;
   transition: width 0.4s ease-out; /* 나중에 데이터 바뀔 때 슥 차오름 */
 `;
@@ -113,73 +114,177 @@ export const MyLevelProgress = styled.div`
 export const ExpText = styled.div`
   ${FONT_STYLE.PRETENDARD.H7_BOLD};
   color: ${theme.PALLETE.headerandfooter};
-  width : calc(100%-600px);
+  width: calc(100%-600px);
   text-align: right;
 `;
 
 export const MyLevelProfileWrap = styled.div`
-position:relative;
-width: 300px;
-height: 100%;
-${flexCenter};
-`
+  position: relative;
+  width: 300px;
+  height: 100%;
+  ${flexCenter};
+`;
 
 export const MyLevelProfileContainer = styled.img`
-position:absolute;
-width: 165px;
-z-index:2;
-`
+  position: absolute;
+  width: 165px;
+  z-index: 2;
+`;
 
 export const MyLevelProfileImg = styled.img`
-position:absolute;
-border-radius:9999px;
-width: 145px;
-z-index:1;
-top: 88px;
-`
-
-
+  position: absolute;
+  border-radius: 9999px;
+  width: 145px;
+  z-index: 1;
+  top: 88px;
+`;
 
 export const LevelLabel = styled.div`
   ${FONT_STYLE.PRETENDARD.H5_BOLD};
   color: ${theme.PALLETE.headerandfooter};
-`
+`;
 
 export const LevelCurrent = styled.div`
-width:130px;
-height: 40px;
-border: 1px solid ${theme.PALLETE.primary.main};
-border-radius: 20px;
-color: ${theme.PALLETE.mainblack};
-${FONT_STYLE.PRETENDARD.H6_BOLD};
-${flexCenter};
-`
+  width: 130px;
+  height: 40px;
+  border: 1px solid ${theme.PALLETE.primary.main};
+  border-radius: 20px;
+  color: ${theme.PALLETE.mainblack};
+  ${FONT_STYLE.PRETENDARD.H6_BOLD};
+  ${flexCenter};
+`;
 
 export const LevelInfoWrap = styled.div`
-width: calc(100%-600px);
-display: flex;
-align-items:center;
-gap: 15px;
-`
+  width: calc(100%-600px);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+`;
 
 export const LevelProgressContainer = styled.div`
-display: flex;
-flex-direction:column;
-justify-content:center;
-`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 export const LevelNextMedal = styled.img`
-width:145px;
-`
+  width: 145px;
+`;
 
 export const NextMedalInfo = styled.div`
-${FONT_STYLE.PRETENDARD.H6_MEDIUM};
-color: ${theme.PALLETE.gray[900]};
-`
+  ${FONT_STYLE.PRETENDARD.H6_MEDIUM};
+  color: ${theme.PALLETE.gray[900]};
+`;
 
 export const MedalWrap = styled.div`
-position:relative;
-width: 300px;
-height: 100%;
-${flexCenterColumn};
-`
+  position: relative;
+  width: 300px;
+  height: 100%;
+  ${flexCenterColumn};
+`;
+
+// ------------------------------------------
+export const MyBadgeWrap = styled.div`
+  width: 100%;
+  ${flexCenter}
+`;
+
+export const MyBadgeField = styled.fieldset`
+  width: 1420px;
+`;
+
+export const BadgeContainer = styled.div`
+  width: 100%;
+  /* 내부 요소 배치를 위한 설정 */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 20px 0 20px 0;
+
+  /* 디자인적 요소 */
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+`;
+
+export const BadgeDiv = styled.div`
+  width: 260px;
+  height: 340px;
+  background-color: ${theme.PALLETE.gray[100]};
+  position: relative;
+  border-radius: 10px;
+  ${flexCenterColumn};
+  cursor: help;
+`;
+
+export const BadgeName = styled.span`
+  ${FONT_STYLE.PRETENDARD.H6_SEMIBOLD};
+`;
+
+export const BadgeExp = styled.div`
+  width: 192px;
+  height: 50px;
+  ${flexCenter};
+  border: 1px solid ${theme.PALLETE.headerandfooter};
+  border-radius: 5px;
+  margin: 12px 0 0 0;
+  background-color: white;
+  ${FONT_STYLE.PRETENDARD.H6_BOLD};
+`;
+
+export const BadgeImg = styled.img`
+  opacity: 0.9;
+`;
+
+export const BadgeLockImg = styled.img`
+  position: absolute;
+  opacity: 0.9;
+  right: 0%;
+  top: -33px;
+`;
+
+export const TooltipBox = styled.div`
+  position: absolute;
+  bottom: 105%; /* 뱃지 위에 띄움 */
+  left: 75%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 430px;
+  background: ${theme.PALLETE.gray[100]};
+  border-radius: 10px;
+  z-index: 100;
+  ${flexCenterColumn}
+  gap: 8px;
+  pointer-events: none; /* 툴팁 때문에 마우스 이벤트가 방해받지 않도록 설정 */
+`;
+
+export const TooltipIconBox = styled.div`
+  width: 100%;
+  height: 60%;
+  background: ${theme.PALLETE.gray[200]};
+  border-radius: 10px 10px 0 0;
+  ${flexCenter};
+`;
+
+export const TooltipName = styled.div`
+  ${FONT_STYLE.PRETENDARD.H5_BOLD};
+  width: 90%;
+  text-align: left;
+  height: 10%;
+`;
+
+export const TooltipDecription = styled.div`
+  whitespace: "pre-wrap";
+  ${FONT_STYLE.PRETENDARD.H7_MEDIUM};
+  width: 90%;
+  height: 20%;
+`;
+
+export const GetBadgeAt = styled.div`
+width: 90%;
+height: 10%;
+display:flex;
+align-items:center;
+gap:5px;
+
+opacity:0;
+`;

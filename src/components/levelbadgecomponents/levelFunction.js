@@ -37,17 +37,18 @@ export const LEVEL_SETTINGS = {
 // 데이터가 없을 때 사용할 기본값
 export const DEFAULT_USER_DATA = {
   level: 1,
-  currentExp: 0
+  currentExp: 0,
 };
 
-export const FarFromNextLevel = ({level}) => {
-  let result = 0
-  if(level<16){
-    result = 16 - level
-  }else if(26 > level >= 16){
-    result = 26 - level
-  }else{
-    result = 0
+export const FarFromNextLevel = ({ level }) => {
+  let result = 0;
+  if (level < 16) {
+    result = 16 - level;
+  } else if (level >= 16) {
+    result = 26 - level;
+  } else if (level >= 26) {
+    result = 0;
   }
-  return result
-}
+  return result;
+};
+
