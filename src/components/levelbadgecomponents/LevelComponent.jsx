@@ -1,4 +1,3 @@
-import React from "react";
 import {
   LEVEL_SETTINGS,
   DEFAULT_USER_DATA,
@@ -6,7 +5,7 @@ import {
 } from "./levelFunction";
 import * as S from "../../pages/levelandbadge/style";
 
-const LevelComponent = ({ userLevel, userCurrentExp }) => {
+const LevelComponent = ({ userLevel, userCurrentExp}) => {
   // 1. 값이 없으면 기본값(0, 1)을 사용하도록 강제 형변환
   const level = Number(userLevel) || DEFAULT_USER_DATA.level;
   const currentExp = Number(userCurrentExp) || DEFAULT_USER_DATA.currentExp;
@@ -40,7 +39,7 @@ const LevelComponent = ({ userLevel, userCurrentExp }) => {
           <S.LevelCurrent>현재 LV. {level}</S.LevelCurrent>
         </S.LevelInfoWrap>
         <S.MyLevelProgressContainer>
-          <S.MyLevelProgress width={progressPercent} />
+          <S.MyLevelProgress width={progressPercent}/>
         </S.MyLevelProgressContainer>
         <S.ExpText>
           {currentExp.toLocaleString()} / {maxExp.toLocaleString()} EXP (

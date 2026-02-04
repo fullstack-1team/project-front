@@ -2,6 +2,7 @@ import React from "react";
 import * as S from "./style";
 import ToChallengeComponent from "../../components/levelbadgecomponents/ToChallengeComponent";
 import MyLevelComponent1 from "../../components/levelbadgecomponents/MyLevelComponent1";
+import MyBadges from "../../components/levelbadgecomponents/MyBadges";
 
 const LevelAndBadge = () => {
   // <Link to={"/reportandchallenge"}>리포트&챌린지 이동</Link>
@@ -45,12 +46,7 @@ const LevelAndBadge = () => {
 
       <MyLevelComponent1 />
 
-      <div>
-        {" "}
-        <div>나의 뱃지</div>
-        <div>특별한 업적을 달성하고 뱃지를 모아보세요</div>
-        <div>뱃지 모달</div>
-      </div>
+      <MyBadges/>
     </S.LevelAndBadgeScreen>
   );
 };
