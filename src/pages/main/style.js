@@ -1,5 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { FONT_STYLE } from "../../styles/common";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 /* ===== MainHero Section ===== */
 
@@ -276,7 +277,6 @@ export const SectionTitle = styled.h2`
 export const SectionDesc = styled.p`
   ${FONT_STYLE.GIANTS.BODY2_REGULAR};
   color: ${({ theme }) => theme.PALLETE.gray700};
-  /* font-weight: ${({ theme })=> theme.FONT_WEIGHT.PRETENDARD.SEMIBOLD}; */
   line-height: 1.6;
 `;
 
@@ -345,6 +345,13 @@ export const StepTextArea = styled.div`
 `;
 
 /* ===== MainRecipe Section ===== */
+export const RecipePanel = styled.div`
+  /* 나중에 스타일 추가 */
+`;
+
+export const RecipeSectionGroup = styled.div`
+    margin-bottom: 140px;
+`;
 
 export const RecipeWrapper = styled.section`
   width: 100%;
@@ -391,18 +398,6 @@ export const RecipeTab = styled.button`
     background: ${({ theme }) => theme.PALLETE.mainblack};
     color: ${({ theme }) => theme.PALLETE.white};
   }
-`;
-
-export const RecipePanel = styled.div`
-  /* position: relative;
-
-  .swiper {
-    padding: 8px 0 16px;
-  }
-  .swiper-slide {
-    height: auto;
-    width: 260px !important;
-  } */
 `;
 
 export const RecipeCard = styled.div`
@@ -507,8 +502,8 @@ export const MetaChip = styled.span`
 
 export const LiveReviewWrapper = styled.section`
   width: 100%;
-  background: ${({ theme }) => theme.PALLETE.white};
-  margin-top: 90px;
+  background: ${({ theme }) => theme.PALLETE.gray[50]};
+  padding: 70px 0 20px
 `;
 
 export const LiveReviewInner = styled.div`
@@ -520,6 +515,7 @@ export const LiveReviewHeader = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 28px;
+  align-items: center;
 `;
 
 export const LiveReviewTitleBox = styled.div``;
@@ -528,6 +524,7 @@ export const LiveReviewSubTitle = styled.p`
   ${FONT_STYLE.GIANTS.CAPTION_REGULAR};
   color: ${({ theme }) => theme.PALLETE.primary.main};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.PRETENDARD.BOLD};
+  font-size: ${({ theme }) => theme.FONT_SIZE.h6};
   margin-bottom: 8px;
 `;
 
@@ -543,35 +540,53 @@ export const LiveReviewMoreButton = styled.button`
   border: 0;
   background: transparent;
   cursor: pointer;
+  height: fit-content;
 
   ${FONT_STYLE.GIANTS.CAPTION_REGULAR};
   color: ${({ theme }) => theme.PALLETE.gray600};
+  opacity: 50%;
+  font-size: ${({ theme }) => theme.FONT_SIZE.h7};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.PRETENDARD.SEMIBOLD};
-
   display: flex;
   align-items: center;
   gap: 6px;
+
+  span {
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1;
+    transform: translateY(1px);
+    margin-top: -5px;
+  }
+
 `;
 
-export const LiveReviewGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+export const LiveReviewSwiper = styled(Swiper)`
+  width: 100%;
+  padding-bottom: 50px;
+
+  .swiper-wrapper {
+    align-items: stretch;
+  }
+
+  .swiper-slide {
+    height: auto;
+  }
 `;
+
 
 export const LiveReviewCard = styled.div`
+  width: 100%;
   background: ${({ theme }) => theme.PALLETE.white};
   border-radius: 16px;
-  padding: 22px;
-  border: 1px solid ${({ theme }) => theme.PALLETE.gray[70]};
+  padding: 24px 20px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.05);
 
-
-  min-height: 260px;
+  min-height: 274px;
   display: flex;
   flex-direction: column;
   &.has-images {
-    min-height: 390px;
+    min-height: 359px;
   }
 
 `;
@@ -583,20 +598,35 @@ export const LiveReviewCardTop = styled.div`
 
 export const LiveReviewMetaLeft = styled.div`
   display: flex;
+  align-items: center;
   gap: 10px;
 `;
 
+/* export const LiveReviewAvatar = styled.div`
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.PALLETE.gray[100]};
+`; */
 export const LiveReviewAvatar = styled.div`
   width: 38px;
   height: 38px;
   border-radius: 50%;
   background: ${({ theme }) => theme.PALLETE.gray[100]};
+  overflow: hidden; /* 원형 마스크 */
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 안 찌그러짐 */
+    display: block;
+  }
 `;
 
 export const LiveReviewRecipeTitle = styled.p`
   ${FONT_STYLE.GIANTS.BODY1_BOLD};
   font-size: ${({ theme }) => theme.FONT_SIZE.h7};
-  margin-bottom: 10px;
+  font-weight: ${({ theme }) => theme.FONT_WEIGHT.PRETENDARD.SEMIBOLD};
 `;
 
 export const LiveReviewBadgeRow = styled.div`
@@ -605,9 +635,9 @@ export const LiveReviewBadgeRow = styled.div`
 `;
 
 export const LiveReviewBadge = styled.span`
-  padding: 6px 10px;
-  border-radius: 10px;
-  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.PRETENDARD.SEMIBOLD};
 
   &.star {
@@ -622,29 +652,40 @@ export const LiveReviewBadge = styled.span`
 `;
 
 export const LiveReviewArrowBtn = styled.button`
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  border: 1px solid ${({ theme }) => theme.PALLETE.gray[100]};
   background: white;
   cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &::after {
+    content: "›";
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1;
+    transform: translateX(1px);
+    color: ${({ theme }) => theme.PALLETE.headerandfooter};
+  }
 `;
 
 export const LiveReviewDivider = styled.div`
   height: 1px;
   background: ${({ theme }) => theme.PALLETE.gray[70]};
-  margin: 16px 0;
+  margin: 24px 0 22px;
 `;
 
 export const LiveReviewUserName = styled.p`
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.PRETENDARD.BOLD};
-  margin-bottom: 8px;
 `;
 
 export const LiveReviewContent = styled.p`
   color: ${({ theme }) => theme.PALLETE.gray700};
   line-height: 1.6;
-
+  margin-top: 10px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -657,8 +698,8 @@ export const LiveReviewImageRow = styled.div`
   display: grid;
   gap: 10px;
 
-  &.count-1 { grid-template-columns: 1fr; }
-  &.count-2 { grid-template-columns: repeat(2, 1fr); }
+  &.count-1 {  grid-template-columns: repeat(3, 1fr);  }
+  &.count-2 { grid-template-columns: repeat(3, 1fr); }
   &.count-3 { grid-template-columns: repeat(3, 1fr); }
 `;
 

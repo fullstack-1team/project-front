@@ -49,4 +49,32 @@ export const LIVE_REVIEW_DATA = [
       "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?w=600&auto=format&fit=crop",
     ],
   },
+  {
+    id: 5,
+    recipeTitle: "테스트1",
+    userName: "마들렌러브",
+    level: 42,
+    xp: 350,
+    content:
+      "버터 향이 진하게 나서 포장 여는 순간부터 기분 좋아져요. 반죽 휴지 시간 지키니까 식감이 확 달라졌습니다. 촉촉하게 잘 나왔어요!",
+    avatarUrl: "",
+    images: [
+      "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&auto=format&fit=crop",
+    ],
+  },
+  {
+    id: 6,
+    recipeTitle: "테스트2",
+    userName: "마들렌러브",
+    level: 42,
+    xp: 350,
+    content:
+      "버터 향이 진하게 나서 포장 여는 순간부터 기분 좋아져요. 반죽 휴지 시간 지키니까 식감이 확 달라졌습니다. 촉촉하게 잘 나왔어요!",
+    avatarUrl: "",
+    images: [
+      "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&auto=format&fit=crop",
+    ],
+  },
 ];
