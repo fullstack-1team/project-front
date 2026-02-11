@@ -254,7 +254,7 @@ export const IconStyle = styled.div`
 
 // Grid 전체 폭 wrapper
 export const GridWrapperStyle = styled.div`
-  width: 1420px;
+  width: 100%;
   margin: 0 auto;
 `;
 
