@@ -60,8 +60,16 @@ const CommunityPostModal = ({
   const count = commentText.length;
 
   return (
-    <S.Backdrop onClick={onClose} role="presentation">
-      <S.Modal onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
+    <S.Backdrop
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose?.();
+      }}
+    >
+      <S.Modal
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+      >
         {/* 상단 이미지 영역 */}
         <S.Hero>
           <S.CloseButton type="button" onClick={onClose} aria-label="닫기">
@@ -72,25 +80,33 @@ const CommunityPostModal = ({
           </S.CloseButton>
 
           {hasImages ? (
-            <>
+            <S.ImageWrapper>
               <S.HeroImage src={currentImage} alt="요리 인증 이미지" />
 
               {images.length > 1 && (
-                <>
-                  <S.NavButtonLeft type="button" onClick={handlePrev} aria-label="이전 이미지">
+                <S.NavControls>
+                  <S.NavButtonLeft
+                    type="button"
+                    onClick={handlePrev}
+                    aria-label="이전 이미지"
+                  >
                     <S.NavIcon
                       src={`${process.env.PUBLIC_URL}/assets/icons/left.svg`}
                       alt="이전"
                     />
                   </S.NavButtonLeft>
 
-                  <S.NavButtonRight type="button" onClick={handleNext} aria-label="다음 이미지">
+                  <S.NavButtonRight
+                    type="button"
+                    onClick={handleNext}
+                    aria-label="다음 이미지"
+                  >
                     <S.NavIcon
                       src={`${process.env.PUBLIC_URL}/assets/icons/right.svg`}
                       alt="다음"
                     />
                   </S.NavButtonRight>
-                </>
+                </S.NavControls>
               )}
 
               {images.length > 1 && (
@@ -98,7 +114,7 @@ const CommunityPostModal = ({
                   {safeIndex + 1} / {images.length}
                 </S.ImageIndex>
               )}
-            </>
+            </S.ImageWrapper>
           ) : (
             <S.HeroPlaceholder>이미지가 없습니다.</S.HeroPlaceholder>
           )}
@@ -160,7 +176,9 @@ const CommunityPostModal = ({
 
             <S.CommentList>
               {comments.length === 0 ? (
-                <S.EmptyComment>아직 댓글이 없어요. 첫 댓글을 남겨보세요!</S.EmptyComment>
+                <S.EmptyComment>
+                  아직 댓글이 없어요. 첫 댓글을 남겨보세요!
+                </S.EmptyComment>
               ) : (
                 comments.map((c, idx) => (
                   <S.CommentItem key={`${c.nickname}-${idx}`}>

@@ -26,10 +26,10 @@ export const Modal = styled.div`
 `;
 
 export const Hero = styled.div`
-  position: relative;
-  width: 100%;
+  /* position: relative; */
+  /* width: 100%; */
   height: 330px;
-  background: #ddd;
+  /* background: #ddd; */
 `;
 
 export const HeroImage = styled.img`
@@ -74,6 +74,27 @@ export const CloseButton = styled.button`
 export const CloseIcon = styled.img`
   width: 22px;
   height: 22px;
+`;
+
+export const ImageWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
+
+export const NavControls = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  padding: 0 22px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* pointer-events: none; 아이콘만 클릭되게 하고 싶으면 */
 `;
 
 export const NavButtonLeft = styled.button`
