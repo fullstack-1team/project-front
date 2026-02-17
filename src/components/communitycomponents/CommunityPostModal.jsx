@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import * as S from "./CommunityPostModal.style";
 
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
@@ -9,9 +9,21 @@ const CommunityPostModal = ({
   post,
   onClickDetail,
   onSubmitComment,
+
+  meNickname, // "요리왕곰순"
+  onEditComment, // (comment, nextText) => {}
+  onDeleteComment, // (comment) => {}
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [commentText, setCommentText] = useState("");
+  const [isCommentComposeOpen, setIsCommentComposeOpen] = useState(false);
+
+  // ✅ 내 댓글 메뉴(⋮) 열려있는 댓글 key
+  const [openMenuKey, setOpenMenuKey] = useState(null);
+
+  // ✅ 인라인 수정 모드
+  const [editingKey, setEditingKey] = useState(null);
+  const [draftText, setDraftText] = useState("");
 
   const images = useMemo(() => post?.images ?? [], [post]);
   const comments = useMemo(() => post?.comments ?? [], [post]);
@@ -19,6 +31,14 @@ const CommunityPostModal = ({
   const hasImages = images.length > 0;
   const safeIndex = clamp(activeIndex, 0, Math.max(0, images.length - 1));
   const currentImage = hasImages ? images[safeIndex] : "";
+
+  const isMine = useCallback(
+    (c) => {
+      if (!meNickname) return false;
+      return String(c?.nickname ?? "").trim() === String(meNickname).trim();
+    },
+    [meNickname]
+  );
 
   const handlePrev = useCallback(() => {
     if (!hasImages) return;
@@ -30,30 +50,106 @@ const CommunityPostModal = ({
     setActiveIndex((prev) => (prev + 1) % images.length);
   }, [hasImages, images.length]);
 
+  const resetComposer = useCallback(() => {
+    setCommentText("");
+    setIsCommentComposeOpen(false);
+  }, []);
+
   const handleSend = useCallback(() => {
     const text = commentText.trim();
     if (!text) return;
 
     onSubmitComment?.(text);
     setCommentText("");
+    setIsCommentComposeOpen(false);
   }, [commentText, onSubmitComment]);
 
-  useEffect(() => {
+  // ✅ 수정 시작
+  const startEdit = useCallback((key, c) => {
+    setEditingKey(key);
+    setDraftText(String(c?.text ?? ""));
+    setOpenMenuKey(null);
+  }, []);
+
+  // ✅ 수정 취소
+  const cancelEdit = useCallback(() => {
+    setEditingKey(null);
+    setDraftText("");
+  }, []);
+
+  // ✅ 수정 저장
+  const saveEdit = useCallback(
+    (c) => {
+      const next = draftText.trim();
+      if (!next) return;
+      onEditComment?.(c, next);
+      setEditingKey(null);
+      setDraftText("");
+    },
+    [draftText, onEditComment]
+  );
+
+   useEffect(() => {
     if (!open) return;
 
     setActiveIndex(0);
     setCommentText("");
+    setIsCommentComposeOpen(false);
+    setOpenMenuKey(null);
+    setEditingKey(null);
+    setDraftText("");
+  }, [open, post?.id]); // post 바뀔 때도 초기화되게
 
-    const handleKeyDown = (e) => {
-      if (e.key === "Escape") onClose?.();
+  // ✅ 최신 상태를 키다운 이벤트에서 쓰기 위해 ref로 보관
+  const openMenuKeyRef = useRef(openMenuKey);
+  const editingKeyRef = useRef(editingKey);
+
+  useEffect(() => {
+    openMenuKeyRef.current = openMenuKey;
+  }, [openMenuKey]);
+
+  useEffect(() => {
+    editingKeyRef.current = editingKey;
+  }, [editingKey]);
+
+  // ✅ 2) 키보드 이벤트만 담당 (초기화 절대 금지)
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (editingKeyRef.current) {
+          cancelEdit();
+          return;
+        }
+        if (openMenuKeyRef.current) {
+          setOpenMenuKey(null);
+          return;
+        }
+        onClose?.();
+      }
       if (e.key === "ArrowLeft") handlePrev();
       if (e.key === "ArrowRight") handleNext();
-      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") handleSend(); // Ctrl+Enter 전송
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") handleSend();
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose, handlePrev, handleNext, handleSend]);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose, handlePrev, handleNext, handleSend, cancelEdit]);
+
+  // ✅ 🔥 메뉴(⋮)가 열려있을 때만: 바깥 클릭하면 닫기 (MenuBox 1초컷 해결)
+  useEffect(() => {
+    if (openMenuKey === null) return;
+
+    const handleWindowClick = () => {
+      setOpenMenuKey(null);
+    };
+
+    window.addEventListener("click", handleWindowClick);
+    return () => {
+      window.removeEventListener("click", handleWindowClick);
+    };
+  }, [openMenuKey]);
 
   if (!open) return null;
 
@@ -86,25 +182,19 @@ const CommunityPostModal = ({
               {images.length > 1 && (
                 <S.NavControls>
                   <S.NavButtonLeft
-                    type="button"
+                    disabled={images.length <= 1}
                     onClick={handlePrev}
-                    aria-label="이전 이미지"
+                    type="button"
                   >
-                    <S.NavIcon
-                      src={`${process.env.PUBLIC_URL}/assets/icons/left.svg`}
-                      alt="이전"
-                    />
+                    <S.NavIcon src="/assets/icons/left.svg" alt="이전" />
                   </S.NavButtonLeft>
 
                   <S.NavButtonRight
-                    type="button"
+                    disabled={images.length <= 1}
                     onClick={handleNext}
-                    aria-label="다음 이미지"
+                    type="button"
                   >
-                    <S.NavIcon
-                      src={`${process.env.PUBLIC_URL}/assets/icons/right.svg`}
-                      alt="다음"
-                    />
+                    <S.NavIcon src="/assets/icons/right.svg" alt="다음" />
                   </S.NavButtonRight>
                 </S.NavControls>
               )}
@@ -170,52 +260,197 @@ const CommunityPostModal = ({
 
           {/* 오른쪽 댓글 */}
           <S.Right>
-            <S.CommentHeader>
-              댓글 <b>{comments.length}</b>
-            </S.CommentHeader>
+            <S.CommentCard>
+              <S.CommentHeader>
+                <S.CommentHeaderTop>
+                  댓글 <b>{comments.length}</b>
+                </S.CommentHeaderTop>
+              </S.CommentHeader>
 
-            <S.CommentList>
-              {comments.length === 0 ? (
-                <S.EmptyComment>
-                  아직 댓글이 없어요. 첫 댓글을 남겨보세요!
-                </S.EmptyComment>
-              ) : (
-                comments.map((c, idx) => (
-                  <S.CommentItem key={`${c.nickname}-${idx}`}>
-                    <S.CommentTop>
-                      <S.CommentNickname>{c.nickname}</S.CommentNickname>
-                      <S.CommentTime>{c.time}</S.CommentTime>
-                    </S.CommentTop>
-                    <S.CommentText>{c.text}</S.CommentText>
-                  </S.CommentItem>
-                ))
-              )}
-            </S.CommentList>
+              <S.SectionDivider />
 
-            <S.CommentComposer>
-              <S.Textarea
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value.slice(0, 300))}
-                placeholder="댓글을 입력하세요(최대 300자)"
-              />
-              <S.SendButton
-                type="button"
-                onClick={handleSend}
-                aria-label="댓글 전송"
-                $disabled={count === 0}
-                disabled={count === 0}
-              >
-                <S.SendIcon
-                  src={`${process.env.PUBLIC_URL}/assets/icons/send.svg`}
-                  alt="전송"
+              {/* 댓글 리스트 */}
+              <S.CommentScrollArea>
+                {comments.length === 0 ? (
+                  <S.EmptyComment>
+                    아직 댓글이 없어요. 첫 댓글을 남겨보세요!
+                  </S.EmptyComment>
+                ) : (
+                  comments.map((c, idx) => {
+                    const mine = isMine(c);
+                    const key = `${c.nickname}-${idx}`;
+                    const isEditing = editingKey === key;
+
+                    return (
+                      <S.CommentItem key={key}>
+                        {/* 닉네임 줄(오른쪽 끝에 메뉴) */}
+                        <S.CommentTop>
+                          <S.CommentLeft>
+                            <S.CommentNickname>{c.nickname}</S.CommentNickname>
+
+                            <S.CommentMeta>
+                              <S.CommentTime>{c.time}</S.CommentTime>
+                              {mine && <S.MineTag>나</S.MineTag>}
+                            </S.CommentMeta>
+                          </S.CommentLeft>
+
+                          {/* 내 댓글만 ⋮ */}
+                          {mine && (
+                            <S.CommentMenuWrap
+                              onClick={(e) => e.stopPropagation()}
+                              onMouseDown={(e) => e.stopPropagation()}
+                            >
+                              <S.KebabButton
+                                type="button"
+                                aria-label="댓글 옵션"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  if (isEditing) return;
+
+                                  setOpenMenuKey((prev) =>
+                                    prev === key ? null : key
+                                  );
+                                }}
+                              >
+                                <S.KebabDots />
+                              </S.KebabButton>
+
+                              {/* 메뉴: 위로 펼쳐지게 */}
+                              {openMenuKey === key && (
+                                <S.MenuBox
+                                  $direction="up"
+                                  onClick={(e) => e.stopPropagation()}
+                                  onMouseDown={(e) => e.stopPropagation()}
+                                >
+                                  <S.MenuItem
+                                    type="button"
+                                    $primary
+                                    onClick={() => startEdit(key, c)}
+                                  >
+                                    <S.MenuIcon
+                                      src="/assets/icons/default_pencil.svg"
+                                      alt="수정"
+                                    />
+                                    수정
+                                  </S.MenuItem>
+
+                                  <S.MenuItem
+                                    type="button"
+                                    $danger
+                                    onClick={() => {
+                                      setOpenMenuKey(null);
+                                      onDeleteComment?.(c);
+                                    }}
+                                  >
+                                    <S.MenuIcon
+                                      src="/assets/icons/default_trash.svg"
+                                      alt="삭제"
+                                    />
+                                    삭제
+                                  </S.MenuItem>
+                                </S.MenuBox>
+                              )}
+                            </S.CommentMenuWrap>
+                          )}
+                        </S.CommentTop>
+
+                        {/* 텍스트(수정모드면 인라인 편집 + 밑줄 primary) */}
+                        <S.CommentTextWrap $editing={isEditing}>
+                          {isEditing ? (
+                            <S.EditTextarea
+                              value={draftText}
+                              autoFocus
+                              onChange={(e) => setDraftText(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                  e.preventDefault();
+                                  saveEdit(c);
+                                }
+                                if (e.key === "Escape") {
+                                  e.preventDefault();
+                                  cancelEdit();
+                                }
+                              }}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          ) : (
+                            <S.CommentText>{c.text}</S.CommentText>
+                          )}
+                        </S.CommentTextWrap>
+
+                        {/* 수정중일 때 우측에 작은 저장/취소 */}
+                        {isEditing && (
+                          <S.EditActionRow>
+                            <S.EditActionButton
+                              type="button"
+                              onClick={cancelEdit}
+                            >
+                              취소
+                            </S.EditActionButton>
+                            <S.EditActionButton
+                              type="button"
+                              $primary
+                              onClick={() => saveEdit(c)}
+                              disabled={!draftText.trim()}
+                            >
+                              저장
+                            </S.EditActionButton>
+                          </S.EditActionRow>
+                        )}
+                      </S.CommentItem>
+                    );
+                  })
+                )}
+              </S.CommentScrollArea>
+
+              {/* 입력 영역 */}
+              <S.CommentComposer>
+                <S.Textarea
+                  value={commentText}
+                  onFocus={() => setIsCommentComposeOpen(true)}
+                  onChange={(e) => setCommentText(e.target.value.slice(0, 300))}
+                  placeholder="댓글을 입력하세요(최대 300자)"
                 />
-              </S.SendButton>
-            </S.CommentComposer>
+                <S.SendButton
+                  type="button"
+                  onClick={handleSend}
+                  aria-label="댓글 전송"
+                  $disabled={count === 0}
+                  disabled={count === 0}
+                >
+                  <S.SendIcon
+                    src={`${process.env.PUBLIC_URL}/assets/icons/send.svg`}
+                    alt="전송"
+                  />
+                </S.SendButton>
+              </S.CommentComposer>
 
-            <S.CounterRow>
-              <S.HelperText>Ctrl+Enter로 전송</S.HelperText>
-              <S.CounterText>{count} / 300</S.CounterText>
-            </S.CounterRow>
+              <S.CounterRow>
+                <S.CounterText>{count} / 300</S.CounterText>
+              </S.CounterRow>
+
+              {/* 입력 드랍다운 용 취소/저장 */}
+              {isCommentComposeOpen && (
+                <S.ActionRow>
+                  <S.ActionButton
+                    type="button"
+                    $variant="ghost"
+                    onClick={resetComposer}
+                  >
+                    취소
+                  </S.ActionButton>
+                  <S.ActionButton
+                    type="button"
+                    $variant="primary"
+                    onClick={handleSend}
+                    disabled={count === 0}
+                    $disabled={count === 0}
+                  >
+                    저장
+                  </S.ActionButton>
+                </S.ActionRow>
+              )}
+            </S.CommentCard>
           </S.Right>
         </S.Body>
       </S.Modal>
