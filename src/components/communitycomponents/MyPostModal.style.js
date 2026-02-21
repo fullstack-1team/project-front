@@ -211,12 +211,6 @@ export const Right = styled.div`
   min-width: 0;
 `;
 
-export const TopRow = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 14px;
-`;
-
 export const Nickname = styled.div`
   ${FONT_STYLE.PRETENDARD.H6_REGULAR};
   font-weight: ${({ theme }) => theme.FONT_WEIGHT.PRETENDARD.SEMIBOLD};
@@ -744,3 +738,106 @@ export const ActionButton = styled.button`
   pointer-events: ${({ $disabled }) => ($disabled ? "none" : "auto")};
 `;
 
+export const TopLeft = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+`;
+
+export const TopRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* ✅ 핵심 */
+  gap: 14px;
+`;
+
+export const PostMenuWrap = styled.div`
+  position: relative;
+  flex-shrink: 0;
+`;
+
+export const EditTitleInput = styled.input`
+  width: 100%;
+  height: 44px;
+  border: 1px solid ${({ theme }) => theme.PALLETE.gray[300]};
+  border-radius: 8px;
+  padding: 0 12px;
+  margin: 18px 0 10px;
+  ${FONT_STYLE.PRETENDARD.H7_REGULAR};
+  outline: none;
+
+  &:focus {
+    border-color: ${({ theme }) => theme.PALLETE.primary.main};
+  }
+`;
+
+export const EditPostTextarea = styled.textarea`
+  width: 100%;
+  min-height: 88px;
+  resize: vertical;
+  border: 1px solid ${({ theme }) => theme.PALLETE.gray[300]};
+  border-radius: 8px;
+  padding: 12px;
+  ${FONT_STYLE.PRETENDARD.H8_REGULAR};
+  outline: none;
+
+  &:focus {
+    border-color: ${({ theme }) => theme.PALLETE.primary.main};
+  }
+`;
+
+export const EditIngredientsInput = styled.input`
+  width: 100%;
+  height: 44px;
+  border: 1px solid ${({ theme }) => theme.PALLETE.gray[300]};
+  border-radius: 8px;
+  padding: 0 12px;
+  margin-top: 12px;
+  ${FONT_STYLE.PRETENDARD.H8_REGULAR};
+  outline: none;
+
+  &:focus {
+    border-color: ${({ theme }) => theme.PALLETE.primary.main};
+  }
+`;
+
+export const PostEditActionRow = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+`;
+
+export const PostEditButton = styled.button`
+  height: 34px;
+  min-width: 74px;
+  padding: 0 12px;
+  border-radius: 8px;
+  cursor: pointer;
+
+  ${FONT_STYLE.PRETENDARD.H8_REGULAR};
+
+  border: ${({ theme, $primary, $danger }) =>
+    $primary || $danger ? "none" : `1px solid ${theme.PALLETE.gray[300]}`};
+
+  background: ${({ theme, $primary, $danger }) =>
+    $primary
+      ? theme.PALLETE.primary.main
+      : $danger
+        ? theme.PALLETE.error
+        : "transparent"};
+
+  color: ${({ theme, $primary, $danger }) =>
+    $primary || $danger ? theme.PALLETE.white : theme.PALLETE.gray[700]};
+
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
+  pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
+`;
+
+export const SelectActionBar = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+`;

@@ -38,6 +38,10 @@ const CommunityPostModal = ({
   const safeIndex = clamp(activeIndex, 0, Math.max(0, images.length - 1));
   const currentImage = hasImages ? images[safeIndex] : "";
 
+  const [isExpanded, setIsExpanded] = useState(false); // 게시글 문장 길이 자세히보기, 간단히
+  const [canToggle, setCanToggle] = useState(false);
+  const descRef = useRef(null);
+
   const isMine = useCallback(
     (c) => {
       if (!meNickname) return false;
@@ -73,7 +77,7 @@ const CommunityPostModal = ({
   // ✅ 수정 시작
   const startEdit = useCallback((key, c) => {
     setEditingKey(key);
-    setDraftText(String(c?.text ?? ""));
+    setDraftText("");
     setOpenMenuKey(null);
   }, []);
 
@@ -104,6 +108,7 @@ const CommunityPostModal = ({
     setOpenMenuKey(null);
     setEditingKey(null);
     setDraftText("");
+    setIsExpanded(false);
   }, [open, post?.id]); // post 바뀔 때도 초기화되게
 
   const [hoverKey, setHoverKey] = useState(null);
@@ -145,6 +150,20 @@ const CommunityPostModal = ({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open, onClose, handlePrev, handleNext, handleSend, cancelEdit]);
 
+  useEffect(() => {
+    if (!open) return;
+    if (isExpanded) return;
+
+    const el = descRef.current;
+    if (!el) return;
+
+    const raf = requestAnimationFrame(() => {
+      setCanToggle(el.scrollHeight > el.clientHeight + 1);
+    });
+
+    return () => cancelAnimationFrame(raf);
+  }, [open, post?.id, post?.content, isExpanded]);
+
   // ✅ 🔥 메뉴(⋮)가 열려있을 때만: 바깥 클릭하면 닫기 (MenuBox 1초컷 해결)
   useEffect(() => {
     if (openMenuKey === null) return;
@@ -185,13 +204,15 @@ const CommunityPostModal = ({
 
           {hasImages ? (
             <S.ImageWrapper>
-              {/* ✅ 배경: 같은 이미지 cover + blur */}
+              {/* ✅ 배경: 같은 이미지 cover  */}
               <S.HeroBg src={currentImage} alt="" aria-hidden="true" />
               <S.HeroBgDim aria-hidden="true" />
 
               {/* ✅ 중앙 메인 이미지: contain */}
               <S.HeroMain>
-                <S.HeroMainImg src={currentImage} alt="요리 인증 이미지" />
+                <S.HeroMainBox>
+                  <S.HeroMainImg src={currentImage} alt="요리 인증 이미지" />
+                </S.HeroMainBox>
               </S.HeroMain>
 
               {images.length > 1 && (
@@ -254,11 +275,18 @@ const CommunityPostModal = ({
             <S.DateText>{post?.createdAt ?? ""}</S.DateText>
 
             <S.Title>{post?.recipeTitle ?? "제목"}</S.Title>
-            <S.Desc>{post?.content ?? ""}</S.Desc>
+            <S.Desc ref={descRef} $expanded={isExpanded}>
+              {post?.content ?? ""}
+            </S.Desc>
 
-            <S.DetailLink type="button" onClick={() => onClickDetail?.(post)}>
-              자세히 보기
-            </S.DetailLink>
+            {canToggle && (
+              <S.DetailLink
+                type="button"
+                onClick={() => setIsExpanded((v) => !v)}
+              >
+                {isExpanded ? "간단히" : "자세히 보기"}
+              </S.DetailLink>
+            )}
 
             <S.SectionTitle>사용한 재료</S.SectionTitle>
 
