@@ -1,31 +1,11 @@
 import React, { useState } from "react";
-import {
-  AddButton,
-  CategoryTab,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalGrid,
-  ModalHeader,
-  ModalOverlay,
-  SelectedHeader,
-  SelectedRow,
-  SelectedSection,
-} from "../../pages/myfridge/style";
-
+import S from "../../pages/myfridge/style";
 import IngredientCard from "./IngredientCard";
 
 const MODAL_CATEGORIES = ["채소", "육류", "해산물", "유제품", "가공품", "기타"];
 
 const AddIngredientDetailModal = ({ onClose, onSubmit, baseIngredients }) => {
   const [activeCategory, setActiveCategory] = useState("육류");
-
-  /**
-   * selectedItems 구조:
-   * {
-   *   [baseId]: { quantity: "", expiredAt: "" }
-   * }
-   */
   const [selectedItems, setSelectedItems] = useState({});
 
   const handleQuantityChange = (baseId, value) => {
@@ -67,18 +47,22 @@ const AddIngredientDetailModal = ({ onClose, onSubmit, baseIngredients }) => {
   };
 
   return (
-    <ModalOverlay>
-      <ModalContent>
-        <ModalHeader>
+    <S.ModalOverlay>
+      <S.ModalContent>
+        <S.ModalHeader>
           {MODAL_CATEGORIES.map((cat) => (
-            <CategoryTab key={cat} active={activeCategory === cat} onClick={() => setActiveCategory(cat)}>
+            <S.CategoryTab
+              key={cat}
+              active={activeCategory === cat}
+              onClick={() => setActiveCategory(cat)}
+            >
               {cat}
-            </CategoryTab>
+            </S.CategoryTab>
           ))}
-        </ModalHeader>
+        </S.ModalHeader>
 
-        <ModalBody>
-          <ModalGrid>
+        <S.ModalBody>
+          <S.ModalGrid>
             {visibleBase.map((item) => (
               <IngredientCard
                 key={item.id}
@@ -88,21 +72,21 @@ const AddIngredientDetailModal = ({ onClose, onSubmit, baseIngredients }) => {
                 onClick={() => handleToggle(item.id)}
               />
             ))}
-          </ModalGrid>
+          </S.ModalGrid>
 
-          <SelectedSection>
-            <SelectedHeader>
+          <S.SelectedSection>
+            <S.SelectedHeader>
               <div>재료명</div>
               <div>수량</div>
               <div>유통기한</div>
-            </SelectedHeader>
+            </S.SelectedHeader>
 
             {Object.entries(selectedItems).map(([baseId, data]) => {
               const item = baseIngredients.find((v) => v.id === Number(baseId));
               if (!item) return null;
 
               return (
-                <SelectedRow key={baseId}>
+                <S.SelectedRow key={baseId}>
                   <div>{item.name}</div>
                   <input
                     type="number"
@@ -114,17 +98,19 @@ const AddIngredientDetailModal = ({ onClose, onSubmit, baseIngredients }) => {
                     value={data.expiredAt}
                     onChange={(e) => handleDateChange(baseId, e.target.value)}
                   />
-                </SelectedRow>
+                </S.SelectedRow>
               );
             })}
 
-            <ModalFooter>
-              <AddButton onClick={handleSubmit}>선택한 재료 추가하기</AddButton>
-            </ModalFooter>
-          </SelectedSection>
-        </ModalBody>
-      </ModalContent>
-    </ModalOverlay>
+            <S.ModalFooter>
+              <S.AddButton onClick={handleSubmit}>
+                선택한 재료 추가하기
+              </S.AddButton>
+            </S.ModalFooter>
+          </S.SelectedSection>
+        </S.ModalBody>
+      </S.ModalContent>
+    </S.ModalOverlay>
   );
 };
 

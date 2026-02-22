@@ -1,11 +1,11 @@
 import React from "react";
 import IngredientCard from "./IngredientCard";
-import { GridStyle, GridWrapperStyle } from "../../pages/myfridge/style";
+import S from "../../pages/myfridge/style";
 
 const IngredientList = ({ items, deleteMode, selectedIds, onToggle }) => {
   return (
-    <GridWrapperStyle>
-      <GridStyle>
+    <S.GridWrapperStyle>
+      <S.GridStyle>
         {items.map((item) => (
           <IngredientCard
             key={item.fridgeId}
@@ -17,8 +17,8 @@ const IngredientList = ({ items, deleteMode, selectedIds, onToggle }) => {
             onClick={() => deleteMode && onToggle(item.fridgeId)}
           />
         ))}
-      </GridStyle>
-    </GridWrapperStyle>
+      </S.GridStyle>
+    </S.GridWrapperStyle>
   );
 };
 

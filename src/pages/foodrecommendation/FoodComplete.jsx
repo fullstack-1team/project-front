@@ -1,8 +1,38 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import S from "./style";
 // import {heroImage} from "/assets/images/kimchi_soup.png"; // 실제 이미지로 교체
 
+
 const FoodComplete = () => {
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [previewImage, setPreviewImage] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const toggleItem = (index) => {
+    setSelectedItems((prev) =>
+      prev.includes(index)
+        ? prev.filter((v) => v !== index)
+        : [...prev, index]
+    );
+  };
+
+    // 파일 선택 핸들러
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // 확장자 체크
+    if (!["image/jpeg", "image/png"].includes(file.type)) {
+      alert("JPG 또는 PNG 파일만 업로드 가능합니다.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreviewImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
   return (
     <S.FCPage>
         {/* ================= Hero ================= */}
@@ -25,11 +55,37 @@ const FoodComplete = () => {
               <S.FCSectionIcon src="/assets/icons/add-web.png" />
               <S.FCSectionHeading>완성 사진 업로드</S.FCSectionHeading>
             </S.FCSectionTitleRow>
-            <S.FCUploadBox>
-              클릭하여 사진을 업로드 하세요.
-              <br />
-              JPG, PNG 파일 가능
+
+            <S.FCUploadBox
+              onClick={() => fileInputRef.current.click()}
+            >
+              {previewImage ? (
+                <img
+                  src={previewImage}
+                  alt="preview"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <>
+                  클릭하여 사진을 업로드 하세요.
+                  <br />
+                  JPG, PNG 파일 가능
+                </>
+              )}
             </S.FCUploadBox>
+
+            {/* 숨겨진 input */}
+            <input
+              type="file"
+              accept="image/jpeg, image/png"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
           </S.FCSection>
 
           {/* 요리 후기 */}
@@ -43,23 +99,37 @@ const FoodComplete = () => {
           </S.FCSection>
 
           {/* 사용한 재료 체크 */}
-          <S.FCSection>
+         <S.FCSection>
             <S.FCSectionTitleRow>
               <S.FCSectionIcon src="/assets/icons/product.png" />
               <S.FCSectionHeading>사용한 재료 체크</S.FCSectionHeading>
             </S.FCSectionTitleRow>
-            <S.FCIngredientBox>
-              {Array.from({ length: 16 }).map((_, index) => (
-                <S.FCIngredientItem key={index}>
-                  <S.FCCheckIcon
-                    src="/assets/icons/thick_check.png"
-                    alt="check"
-                  />
-                  밥 1공기
-                </S.FCIngredientItem>
-              ))}
 
-              <S.FCSelectedCount>16개 재료 선택됨</S.FCSelectedCount>
+            <S.FCIngredientBox>
+              {Array.from({ length: 16 }).map((_, index) => {
+                const isActive = selectedItems.includes(index);
+
+                return (
+                  <S.FCIngredientItem
+                    key={index}
+                    onClick={() => toggleItem(index)}
+                  >
+                    <S.FCCheckIcon
+                      src={
+                        isActive
+                          ? "/assets/icons/hover_check_circle_broken.svg" // 오렌지 아이콘
+                          : "/assets/icons/default_check_circle_broken.svg"   // 회색 아이콘
+                      }
+                      alt="check"
+                    />
+                    밥 1공기
+                  </S.FCIngredientItem>
+                );
+              })}
+
+              <S.FCSelectedCount>
+                {selectedItems.length}개 재료 선택됨
+              </S.FCSelectedCount>
             </S.FCIngredientBox>
           </S.FCSection>
 

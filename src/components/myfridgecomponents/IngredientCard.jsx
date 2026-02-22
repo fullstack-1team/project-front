@@ -1,18 +1,18 @@
 import React from "react";
-import { CardStyle, CardTextStyle, HoverInfo, IconStyle } from "../../pages/myfridge/style";
+import S from "../../pages/myfridge/style";
 
 const IngredientCard = ({ name, icon = "🥬", active, onClick, quantity, expiredAt }) => {
   return (
-    <CardStyle active={active} onClick={onClick}>
-      <IconStyle>{icon}</IconStyle>
-      <CardTextStyle>{name}</CardTextStyle>
+    <S.CardStyle active={active} onClick={onClick}>
+      <S.IconStyle>{icon}</S.IconStyle>
+      <S.CardTextStyle>{name}</S.CardTextStyle>
 
-      <HoverInfo>
+      <S.HoverInfo>
         <p>재료명: {name}</p>
         <p>수량: {quantity ?? 0}</p>
         <p>유통기한: {expiredAt || "-"}</p>
-      </HoverInfo>
-    </CardStyle>
+      </S.HoverInfo>
+    </S.CardStyle>
   );
 };
 

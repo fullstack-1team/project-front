@@ -282,7 +282,7 @@ S.FCSectionIcon = styled.img`
 S.FCUploadBox = styled.div`
   width: 100%;
   height: 180px;
-  border: 1px dashed #ccc;
+  border: 1px solid #ccc;
   background: #fff;
   display: flex;
   flex-direction: column;
@@ -290,6 +290,10 @@ S.FCUploadBox = styled.div`
   justify-content: center;
   font-size: 13px;
   color: #888;
+  cursor: pointer;
+    &:hover {
+    border-color: #ff4d37;
+  }
 `;
 
 /* ================= 후기 ================= */
@@ -336,6 +340,16 @@ S.FCIngredientItem = styled.div`
   align-items: center;
   gap: 8px;
   font-size: 14px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  background-color: ${(props) =>
+    props.$active ? "#ff4d37" : "#ffffff"};
+
+  color: ${(props) =>
+    props.$active ? "#ffffff" : "#333333"};
 `;
 
 S.FCCheckIcon = styled.img`

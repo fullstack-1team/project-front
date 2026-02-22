@@ -1,5 +1,5 @@
 import React from "react";
-import { AddButton } from "../../pages/myfridge/style";
+import S from "../../pages/myfridge/style";
 
 const AddIngredientModal = ({ onNext }) => {
   return (
@@ -10,9 +10,9 @@ const AddIngredientModal = ({ onNext }) => {
         style={{ width: 200, marginBottom: 24 }}
       />
 
-      <AddButton onClick={onNext}>
+      <S.AddButton onClick={onNext}>
         냉장고를 채워볼까요?
-      </AddButton>
+      </S.AddButton>
     </>
   );
 };
